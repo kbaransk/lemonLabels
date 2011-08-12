@@ -4,20 +4,29 @@
  */
 package pl.kbaranski.lemonlabels;
 
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 /**
  *
  * @author krzysiek
  */
 public class ConfigReader {
-    private ConfigReader() {
-        this.dbHost = "localhost";
-        this.dbPort = "3306";
-        this.dbUser = "root";
-        this.dbPass = "masterkey";
-        this.dbName = "lemon";
-        this.fontName = "Ubuntu";
-        this.fontDir = "/usr/share/fonts/truetype/ubuntu-font-family";
-        this.priceFormat = "\u00A3 #0.00";
+    private ConfigReader() throws ConfigurationException {
+        
+        PropertiesConfiguration config = new PropertiesConfiguration(new File(getUserHomeDir(), ".lemonLabels.properties"));
+        
+        this.dbHost = config.getString("db.host", "localhost");
+        this.dbPort = config.getString("db.port", "3306");
+        this.dbUser = config.getString("db.user", "root");
+        this.dbPass = config.getString("db.pass");
+        this.dbName = config.getString("db.name", "mysql");
+        this.fontName = config.getString("font.name", "Ubuntu");
+        this.fontDir = config.getString("font.dir", "/usr/share/fonts/truetype/ubuntu-font-family");
+        this.priceFormat = config.getString("price.format", "#0.00");
     }
     
     private static ConfigReader configReader = null;
@@ -34,8 +43,13 @@ public class ConfigReader {
     private String priceFormat;
     
     public static ConfigReader instance() {
-        if (configReader == null)
-            configReader = new ConfigReader();
+        if (configReader == null) {
+            try {
+                configReader = new ConfigReader();
+            } catch (ConfigurationException ex) {
+                Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return configReader;
     }
 
@@ -69,5 +83,9 @@ public class ConfigReader {
 
     public String getPriceFormat() {
         return priceFormat;
+    }
+    
+    public File getUserHomeDir() {
+        return new File(System.getProperty("user.home"));
     }
 }

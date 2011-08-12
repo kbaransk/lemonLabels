@@ -10,6 +10,7 @@
  */
 package pl.kbaranski.lemonlabels;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,6 +54,12 @@ public class LemonLabels extends javax.swing.JFrame {
 
         productCodeLabel.setText("Kod produktu");
 
+        productCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                productCodeKeyPressed(evt);
+            }
+        });
+
         choosedProductCodes.setModel(listModel);
         jScrollPane1.setViewportView(choosedProductCodes);
 
@@ -78,14 +85,14 @@ public class LemonLabels extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(productCodeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(productCode, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(productCode, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(addProductButton))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(117, 117, 117)
+                .addContainerGap(167, Short.MAX_VALUE)
                 .addComponent(generatePdf)
-                .addContainerGap(133, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                .addGap(173, 173, 173))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,6 +118,7 @@ public class LemonLabels extends javax.swing.JFrame {
         else {
             listModel.addElement(p);
         }
+        this.productCode.requestFocus();
     }
     
 private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductButtonActionPerformed
@@ -143,6 +151,12 @@ private void generatePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             JOptionPane.showMessageDialog(this, "Blad podczas proby wydruku", "Error " + ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
         }
 }//GEN-LAST:event_generatePdfActionPerformed
+
+private void productCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productCodeKeyPressed
+    if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        addProductButtonActionPerformed(null);
+    }
+}//GEN-LAST:event_productCodeKeyPressed
 
     /**
      * @param args the command line arguments

@@ -34,7 +34,7 @@ public class Printer {
     DecimalFormat priceFormat;
     
     public Printer(List<Product> products) throws IOException {
-        File homeDir = new File(System.getProperty("user.home"));
+        File homeDir = ConfigReader.instance().getUserHomeDir();
         String name = "lemonLabels-" + System.currentTimeMillis() + ",pdf";
         this.file = new File(homeDir, name);
         this.products = products;
@@ -99,10 +99,5 @@ public class Printer {
             System.err.println(e.getMessage()); 
         }
         document.close(); 
-    }
-
-    public static void main(String[] args) throws IOException {
-        Printer p = new Printer(null);
-        p.createPdf();
     }
 }
