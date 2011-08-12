@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -26,27 +26,27 @@ import java.util.Collection;
  */
 public class Printer {
     File file;
-    Collection<Product> products;
+    List<Product> products;
     Font nameFont;
     Font priceFont;
     Font unitFont;
     Font spaceLineFont;
     DecimalFormat priceFormat;
     
-    public Printer(Collection<Product> products) throws IOException {
+    public Printer(List<Product> products) throws IOException {
         File homeDir = new File(System.getProperty("user.home"));
         String name = "lemonLabels-" + System.currentTimeMillis() + ",pdf";
         this.file = new File(homeDir, name);
         this.products = products;
-        this.priceFormat = new DecimalFormat("\u00A3 #.00");
+        this.priceFormat = new DecimalFormat(ConfigReader.instance().getPriceFormat());
 
-        FontFactory.registerDirectory("/usr/share/fonts/truetype/ubuntu-font-family");
+        FontFactory.registerDirectory(ConfigReader.instance().getFontDir());
 
-        BaseFont baseUbuntu = FontFactory.getFont("Ubuntu").getBaseFont();
-        this.nameFont = new Font(baseUbuntu, 14, Font.NORMAL);
-        this.priceFont = new Font(baseUbuntu, 16, Font.BOLD);
-        this.unitFont = new Font(baseUbuntu, 10, Font.BOLD);
-        this.spaceLineFont = new Font(baseUbuntu, 10, Font.NORMAL);
+        BaseFont baseUbuntu = FontFactory.getFont(ConfigReader.instance().getFontName()).getBaseFont();
+        this.nameFont = new Font(baseUbuntu, 12, Font.NORMAL);
+        this.priceFont = new Font(baseUbuntu, 18, Font.BOLDITALIC);
+        this.unitFont = new Font(baseUbuntu, 10, Font.BOLDITALIC);
+        this.spaceLineFont = new Font(baseUbuntu, 5, Font.NORMAL);
     }
 
     public float pt2mm(float from) {
@@ -60,11 +60,15 @@ public class Printer {
 
     private void addCell(PdfPTable table, Product product) {
         float h = mm2pt(33.0f);
-        Phrase p = new Phrase(product.getName() + "\n", this.nameFont);
-        p.add(new Phrase(" \n", this.spaceLineFont));
-        p.add(new Phrase(priceFormat.format(product.getPrice()) + "\n", this.priceFont));
-        p.add(new Phrase(" \n", this.spaceLineFont));
-        p.add(new Phrase(product.getUnit(), this.unitFont));
+        
+        Phrase p = new Phrase("", this.nameFont);
+        if (product != null) {
+            p = new Phrase(product.getName() + "\n", this.nameFont);
+            p.add(new Phrase(" \n", this.spaceLineFont));
+            p.add(new Phrase(priceFormat.format(product.getPrice()) + "\n", this.priceFont));
+            p.add(new Phrase(" \n", this.spaceLineFont));
+            p.add(new Phrase(product.getUnit(), this.unitFont));
+        }
 
         PdfPCell cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -83,10 +87,13 @@ public class Printer {
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
             table.setWidths(new int[]{1, 1, 1, 1});
-            for (int i = 0; i <= 32; i++) {
-                Product p = new Product(i, "nalkjhgfdswecxzme " + i, Float.valueOf(i), "unit " + i);
+            for (Product p : products)
                 addCell(table, p);
+            
+            for (int i = products.size(); i < 4; i++) {
+                addCell(table, null);
             }
+            
             document.add(table);
         } catch (Exception e) { 
             System.err.println(e.getMessage()); 

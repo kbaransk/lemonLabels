@@ -10,9 +10,12 @@
  */
 package pl.kbaranski.lemonlabels;
 
-import com.lowagie.text.PageSize;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,9 +27,11 @@ public class LemonLabels extends javax.swing.JFrame {
     public LemonLabels() {
         listModel = new DefaultListModel();
         initComponents();
+        database = new Database();
     }
 
     DefaultListModel listModel;
+    Database database;
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -60,6 +65,11 @@ public class LemonLabels extends javax.swing.JFrame {
         });
 
         generatePdf.setText("Drukuj");
+        generatePdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generatePdfActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,21 +103,51 @@ public class LemonLabels extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addProductToList(String productCode) {
-        listModel.addElement(productCode);
+    private void addProductToList(Long productCode) {
+        Product p = database.findProduct(productCode);
+        if (p == null) {
+            JOptionPane.showMessageDialog(this, "Nie odnaleziono produktu", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            listModel.addElement(p);
+        }
     }
     
 private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductButtonActionPerformed
     String txt = productCode.getText();
-    if (txt != null && !"".equals(txt))
-        addProductToList(txt);
+    if (txt != null && !"".equals(txt)) {
+        try {
+            addProductToList(Long.parseLong(txt));
+        }
+        catch (Exception ex) {
+            System.err.println(ex.getLocalizedMessage());
+            JOptionPane.showMessageDialog(this, "Blad parsowania kodu produktu", "Error" + ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+        }
+    }
     productCode.setText(null);
 }//GEN-LAST:event_addProductButtonActionPerformed
+
+private void generatePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePdfActionPerformed
+        List<Product> products = new ArrayList<Product>();
+        for (int i = 0; i < listModel.getSize(); i++) {
+            Product p = (Product)listModel.get(i);
+            products.add(p);
+        }
+        
+        try {
+            Printer p = new Printer(products);
+            p.createPdf();
+            listModel.clear();
+        } catch (IOException ex) {
+            System.err.println(ex.getLocalizedMessage());
+            JOptionPane.showMessageDialog(this, "Blad podczas proby wydruku", "Error " + ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+        }
+}//GEN-LAST:event_generatePdfActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, SQLException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -130,7 +170,7 @@ private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//
             java.util.logging.Logger.getLogger(LemonLabels.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-Printer.main(args);System.exit(0);
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
 

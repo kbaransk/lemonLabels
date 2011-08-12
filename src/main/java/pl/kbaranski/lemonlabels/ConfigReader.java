@@ -11,11 +11,13 @@ package pl.kbaranski.lemonlabels;
 public class ConfigReader {
     private ConfigReader() {
         this.dbHost = "localhost";
-        this.dbPort = "3602";
+        this.dbPort = "3306";
         this.dbUser = "root";
         this.dbPass = "masterkey";
+        this.dbName = "lemon";
         this.fontName = "Ubuntu";
         this.fontDir = "/usr/share/fonts/truetype/ubuntu-font-family";
+        this.priceFormat = "\u00A3 #0.00";
     }
     
     private static ConfigReader configReader = null;
@@ -24,9 +26,12 @@ public class ConfigReader {
     private String dbPass;
     private String dbHost;
     private String dbPort;
+    private String dbName;
     
     private String fontName;
     private String fontDir;
+    
+    private String priceFormat;
     
     public static ConfigReader instance() {
         if (configReader == null)
@@ -50,11 +55,19 @@ public class ConfigReader {
         return dbPort;
     }
 
+    public String getDbName() {
+        return dbName;
+    }
+
     public String getFontName() {
         return fontName;
     }
 
     public String getFontDir() {
         return fontDir;
-    }    
+    }
+
+    public String getPriceFormat() {
+        return priceFormat;
+    }
 }

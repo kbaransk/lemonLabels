@@ -10,7 +10,7 @@ package pl.kbaranski.lemonlabels;
  */
 public class Product {
     
-    private Integer code;
+    private Long code;
     private String name;
     private Float price;
     private String unit;
@@ -18,17 +18,17 @@ public class Product {
     public Product() {
     }
     
-    public Product(Integer code, String name, Float price, String unit) {
+    public Product(Long code, String name, Float price, String unit) {
         this.code = code;
         this.name = name;
         this.price = price;
         this.unit = unit;
     }
     
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
-    public void setCode(Integer code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 
@@ -51,5 +51,10 @@ public class Product {
     }
     public void setUnit(String unit) {
         this.unit = unit;
-    }    
+    }
+    
+    @Override
+    public String toString() {
+        return name + " [" + code + "]";
+    }
 }
