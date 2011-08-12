@@ -35,7 +35,7 @@ public class Printer {
     
     public Printer(List<Product> products) throws IOException {
         File homeDir = ConfigReader.instance().getUserHomeDir();
-        String name = "lemonLabels-" + System.currentTimeMillis() + ",pdf";
+        String name = "lemonLabels-" + System.currentTimeMillis() + ".pdf";
         this.file = new File(homeDir, name);
         this.products = products;
         this.priceFormat = new DecimalFormat(ConfigReader.instance().getPriceFormat());

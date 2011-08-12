@@ -1,13 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * LemonLabels.java
- *
- * Created on 2011-08-08, 21:13:28
- */
 package pl.kbaranski.lemonlabels;
 
 import java.awt.event.KeyEvent;
