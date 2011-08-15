@@ -43,10 +43,11 @@ public class Printer {
         FontFactory.registerDirectory(ConfigReader.instance().getFontDir());
 
         BaseFont baseUbuntu = FontFactory.getFont(ConfigReader.instance().getFontName()).getBaseFont();
-        this.nameFont = new Font(baseUbuntu, 12, Font.NORMAL);
-        this.priceFont = new Font(baseUbuntu, 18, Font.BOLDITALIC);
-        this.unitFont = new Font(baseUbuntu, 10, Font.BOLDITALIC);
-        this.spaceLineFont = new Font(baseUbuntu, 5, Font.NORMAL);
+        this.nameFont = new Font(baseUbuntu, ConfigReader.instance().getFontSizeName(), Font.NORMAL);
+        this.priceFont = new Font(baseUbuntu, ConfigReader.instance().getFontSizePrice(), Font.BOLDITALIC);
+        this.unitFont = new Font(baseUbuntu, ConfigReader.instance().getFontSizeUnit(), Font.BOLDITALIC);
+        
+        this.spaceLineFont = (ConfigReader.instance().getFontSizeSeparator() <= 0) ? null : new Font(baseUbuntu, 5, Font.NORMAL);
     }
 
     public float pt2mm(float from) {
@@ -64,9 +65,11 @@ public class Printer {
         Phrase p = new Phrase("", this.nameFont);
         if (product != null) {
             p = new Phrase(product.getName() + "\n", this.nameFont);
-            p.add(new Phrase(" \n", this.spaceLineFont));
+            if (this.spaceLineFont != null)
+                p.add(new Phrase(" \n", this.spaceLineFont));
             p.add(new Phrase(priceFormat.format(product.getPrice()) + "\n", this.priceFont));
-            p.add(new Phrase(" \n", this.spaceLineFont));
+            if (this.spaceLineFont != null)
+                p.add(new Phrase(" \n", this.spaceLineFont));
             p.add(new Phrase(product.getUnit(), this.unitFont));
         }
 
@@ -79,7 +82,7 @@ public class Printer {
     }
     
     public void createPdf() {
-        Document document = new Document(PageSize.A4, mm2pt(10.0f), mm2pt(10.0f), mm2pt(16.5f), mm2pt(16.5f));
+        Document document = new Document(PageSize.A4, mm2pt(ConfigReader.instance().getMarginLeft()), mm2pt(ConfigReader.instance().getMarginRight()), mm2pt(ConfigReader.instance().getMarginTop()), mm2pt(ConfigReader.instance().getMarginBottom()));
 
         try {
             PdfWriter.getInstance(document, new FileOutputStream(file));

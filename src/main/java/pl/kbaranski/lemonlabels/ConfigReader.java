@@ -27,6 +27,16 @@ public class ConfigReader {
         this.fontName = config.getString("font.name", "Ubuntu");
         this.fontDir = config.getString("font.dir", "/usr/share/fonts/truetype/ubuntu-font-family");
         this.priceFormat = config.getString("price.format", "#0.00");
+        
+        this.fontSizeName = config.getInt("font.size.name", 12);
+        this.fontSizePrice = config.getInt("font.size.price", 18);
+        this.fontSizeUnit = config.getInt("font.size.unit", 10);
+        this.fontSizeSeparator = config.getInt("font.size.separator", 5);
+        
+        this.marginLeft = config.getFloat("margin.left", 10.0f);
+        this.marginRight = config.getFloat("margin.right", 10.0f);
+        this.marginTop = config.getFloat("margin.top", 15.0f);
+        this.marginBottom = config.getFloat("margin.bottom", 15.0f);
     }
     
     private static ConfigReader configReader = null;
@@ -41,6 +51,16 @@ public class ConfigReader {
     private String fontDir;
     
     private String priceFormat;
+    
+    private int fontSizeName;
+    private int fontSizePrice;
+    private int fontSizeUnit;
+    private int fontSizeSeparator;
+    
+    private float marginLeft;
+    private float marginRight;
+    private float marginTop;
+    private float marginBottom;
     
     public static ConfigReader instance() {
         if (configReader == null) {
@@ -85,7 +105,43 @@ public class ConfigReader {
         return priceFormat;
     }
     
-    public File getUserHomeDir() {
+    public final File getUserHomeDir() {
         return new File(System.getProperty("user.home"));
+    }
+
+    public int getFontSizeName() {
+        return fontSizeName;
+    }
+
+    public int getFontSizePrice() {
+        return fontSizePrice;
+    }
+
+    public int getFontSizeUnit() {
+        return fontSizeUnit;
+    }
+
+    public int getFontSeparator() {
+        return getFontSizeSeparator();
+    }
+
+    public int getFontSizeSeparator() {
+        return fontSizeSeparator;
+    }
+
+    public float getMarginLeft() {
+        return marginLeft;
+    }
+
+    public float getMarginRight() {
+        return marginRight;
+    }
+
+    public float getMarginTop() {
+        return marginTop;
+    }
+
+    public float getMarginBottom() {
+        return marginBottom;
     }
 }
