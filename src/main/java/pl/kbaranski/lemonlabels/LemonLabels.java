@@ -39,6 +39,7 @@ public class LemonLabels extends javax.swing.JFrame {
         choosedProductCodes = new javax.swing.JList();
         addProductButton = new javax.swing.JButton();
         generatePdf = new javax.swing.JButton();
+        removeSelected = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,6 +69,13 @@ public class LemonLabels extends javax.swing.JFrame {
             }
         });
 
+        removeSelected.setText("Usuń zaznaczone");
+        removeSelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeSelectedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,10 +87,12 @@ public class LemonLabels extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(addProductButton))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(167, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(49, 49, 49)
                 .addComponent(generatePdf)
-                .addGap(173, 173, 173))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addComponent(removeSelected)
+                .addGap(39, 39, 39))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,7 +104,9 @@ public class LemonLabels extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(generatePdf))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(removeSelected)
+                    .addComponent(generatePdf)))
         );
 
         pack();
@@ -148,6 +160,12 @@ private void productCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:eve
     }
 }//GEN-LAST:event_productCodeKeyPressed
 
+private void removeSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSelectedActionPerformed
+    int[] idxs = this.choosedProductCodes.getSelectedIndices();
+    for (int i = idxs.length -1; i >= 0; i--)
+        this.listModel.remove(idxs[i]);
+}//GEN-LAST:event_removeSelectedActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -190,5 +208,6 @@ private void productCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:eve
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField productCode;
     private javax.swing.JLabel productCodeLabel;
+    private javax.swing.JButton removeSelected;
     // End of variables declaration//GEN-END:variables
 }

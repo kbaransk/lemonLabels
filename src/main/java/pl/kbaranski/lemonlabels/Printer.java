@@ -93,7 +93,7 @@ public class Printer {
             for (Product p : products)
                 addCell(table, p);
             
-            for (int i = products.size(); i < 4; i++) {
+            for (int i = products.size() % 4; i < 4; i++) {
                 addCell(table, null);
             }
             
