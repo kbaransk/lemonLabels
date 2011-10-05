@@ -46,6 +46,7 @@ public class LemonLabels extends javax.swing.JFrame {
         productCodeLabel.setText("Kod produktu");
 
         productCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 productCodeKeyPressed(evt);
             }
@@ -57,6 +58,7 @@ public class LemonLabels extends javax.swing.JFrame {
         addProductButton.setActionCommand("addProduct");
         addProductButton.setLabel("Dodaj produkt");
         addProductButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addProductButtonActionPerformed(evt);
             }
@@ -64,6 +66,7 @@ public class LemonLabels extends javax.swing.JFrame {
 
         generatePdf.setText("Drukuj");
         generatePdf.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generatePdfActionPerformed(evt);
             }
@@ -71,6 +74,7 @@ public class LemonLabels extends javax.swing.JFrame {
 
         removeSelected.setText("Usuń zaznaczone");
         removeSelected.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeSelectedActionPerformed(evt);
             }
@@ -196,6 +200,7 @@ private void removeSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GE
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 new LemonLabels().setVisible(true);
             }
